@@ -10,6 +10,7 @@ import Footer from "./components/Footer";
 import Profile from "./pages/Profile";
 import Products from "./pages/Products";
 import Cart from "./pages/Cart";
+import Dashboard from "./pages/Dashboard";
 
 const router = createBrowserRouter([
   { path:'/',
@@ -37,6 +38,16 @@ const router = createBrowserRouter([
   {
     path:'/cart',
     element:<> <Navbar/> <Cart/> <Footer/> </>
+  },
+  {
+    path:'/dashboard',
+    element: <Dashboard/>,
+    children:[
+      {
+        path:'sales',
+        element: <h1>Sales</h1>
+      },
+    ]  
   }
 ])
 const App = () =>{

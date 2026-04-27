@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import userLogo from "../assets/userLogo.png";
 import { Button } from "@/components/ui/button";
@@ -27,19 +27,34 @@ const Cart = () =>{
     const API = "http://localhost:8000/api/v1/cart"
     const accessToken = localStorage.getItem("accessToken")
 
-    const handleUpdateQuantity = async (productId, type) => {
-    try {
-        const res = await axios.put(`${API}/update`, {productId, type}, {
-            headers:{
-                Authorization: `Bearer ${accessToken}`
+    const loadCart = async () =>{
+        try{
+            const res = await axios.get(`${API}/get`, {
+                headers:{
+                    Authorization: `Bearer ${accessToken}`
+                } 
+            })
+            if(res.data.success){
+                dispatch(setCart(res.data.cart))
             }
-        })
-        if(res.data.success){
-            dispatch(setCart(res.data.cart))
+        }catch(error){
+            console.log(error);
         }
-    } catch (error) {
-        console.log(error);
     }
+
+    const handleUpdateQuantity = async (productId, type) => {
+        try {
+            const res = await axios.put(`${API}/update`, {productId, type}, {
+                headers:{
+                    Authorization: `Bearer ${accessToken}`
+                }
+            })
+            if(res.data.success){
+                dispatch(setCart(res.data.cart))
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const handleRemove = async(productId) =>{
@@ -60,6 +75,10 @@ const Cart = () =>{
         }
     }
 
+
+    useEffect(() =>{
+        loadCart();
+     }, [ dispatch]);
 
 
 
