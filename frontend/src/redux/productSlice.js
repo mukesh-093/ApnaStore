@@ -11,7 +11,7 @@ const productSlice = createSlice({
       state.products = action.payload;
     },
     setCart:(state, action) =>{
-        state.cart = action.payload
+        state.cart = action.payload;
     }
   },
 });
