@@ -8,13 +8,14 @@ import { setProducts } from "@/redux/productSlice";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
-// import Products from "../Products";
+
 
 const AddProduct = () =>{
     const accessToken = localStorage.getItem("accessToken");
     const dispatch = useDispatch();
+    const { products } = useSelector((state) => state.product);
     const [loading, setLoading] = useState(false);
     const [productData, setProductData] = useState({
         productName: "",
@@ -22,6 +23,7 @@ const AddProduct = () =>{
         brand: "",
         category: "",
         productDesc: "",
+        productImg: [],
     })
 
     const handelChange = (e) =>{
@@ -52,14 +54,14 @@ const AddProduct = () =>{
 
         try {
             setLoading(true);
-            const res = await axios.post(`http://localhost:8000/api/v1/products/add`, formData, {
+            const res = await axios.post(`http://localhost:8000/api/v1/product/add`, formData, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                     
                 },
             });
             if (res.data.success) {
-                dispatch(setProducts([...Products, res.data.product]));
+                dispatch(setProducts([...products, res.data.product]));
                 toast.success("Product added successfully");
             }
         } catch (error) {
@@ -132,7 +134,7 @@ const AddProduct = () =>{
                         <ImageUpload productData={productData} setProductData= {setProductData} />
 
                         <CardFooter className="flex-col gap-2">
-                            <Button disabled={loading} onClick={submitHandler} className='w-full bg-pink-600 cursor-pointer ' type='submit'>
+                            <Button disabled={loading} onClick={submitHandler} className='w-full bg-pink-600 cursor-pointer shadow ' type='submit'>
                                 {
                                     loading ? <span className="flex gap-1 items-center"><Loader2 className="animate-spin" />Please wait...</span>: "Add Product"
                                 }
