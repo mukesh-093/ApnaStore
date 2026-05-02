@@ -11,6 +11,15 @@ import Profile from "./pages/Profile";
 import Products from "./pages/Products";
 import Cart from "./pages/Cart";
 import Dashboard from "./pages/Dashboard";
+import AdminSales from "./pages/admin/AdminSales";
+import AddProduct from "./pages/admin/AddProduct";
+import AdminProduct from "./pages/admin/AdminProduct";
+import AdminOrders from "./pages/admin/AdminOrders";
+import ShowUserOrders from "./pages/admin/ShowUserOrders";
+import AdminUsers from "./pages/admin/AdminUsers";
+import UserInfo from "./pages/admin/UserInfo";
+import ProtectedRoute from "./components/ProtectedRoute";
+import SingleProduct from "./pages/SingleProduct";
 
 const router = createBrowserRouter([
   { path:'/',
@@ -29,23 +38,51 @@ const router = createBrowserRouter([
     element:<> <VerifyEmail/> </>
   },
   { path:'/profile/:userId',
-    element:<><Navbar/> <Profile/><Footer /> </>
+    element: <ProtectedRoute> <Navbar/> <Profile/><Footer />  </ProtectedRoute>
   },
   {
     path:'/products',
     element:<> <Navbar/> <Products/> <Footer/> </>
   },
   {
+    path:'/products/:id',
+    element:<> <Navbar/> <SingleProduct/> <Footer/> </>
+  },
+  {
     path:'/cart',
-    element:<> <Navbar/> <Cart/> <Footer/> </>
+    element:<> <ProtectedRoute> <Navbar/> <Cart/> <Footer/> </ProtectedRoute> </>
   },
   {
     path:'/dashboard',
-    element: <Dashboard/>,
+    element:<ProtectedRoute adminOnly={true}> <Navbar/> <Dashboard/>  </ProtectedRoute>,
     children:[
       {
         path:'sales',
-        element: <h1>Sales</h1>
+        element:<AdminSales/>
+      },
+      {
+        path:'add-product',
+        element:<AddProduct/>
+      },
+      {
+        path:'products',
+        element:<AdminProduct/>  
+      },
+      {
+        path:'orders',
+        element:<AdminOrders/>
+      },
+      {
+        path:'users/orders/:userId',
+        element:<ShowUserOrders/>
+      },
+      {
+        path:'users',
+        element:<AdminUsers/>
+      },
+      {
+        path:'users/:id',
+        element:<UserInfo/>
       },
     ]  
   }
